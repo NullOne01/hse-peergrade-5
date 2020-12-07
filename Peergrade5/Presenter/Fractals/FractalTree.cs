@@ -14,17 +14,14 @@ namespace Peergrade5.Presenter.Fractals
     class FractalTree : FractalBase
     {
         public override int MaxIterationNum 
-            { get => 20; set { } }
-
-        private Task asyncTask;
-        private CancellationTokenSource cancelSource;
-        private CancellationToken cancelToken;
+            { get => 15; set { } }
 
         public FractalTree(FractalOptions fractalOptions) : base(fractalOptions) {
 
         }
 
         private void FillPoints(RecursivePoint2D pointFrom) {
+            // Replaced recursion on two loops. I don't trust recursions :)
             List<FigureBase> listFigures = new List<FigureBase>();
 
             Queue<RecursivePoint2D> pointsToContinue = new Queue<RecursivePoint2D>();
@@ -59,7 +56,7 @@ namespace Peergrade5.Presenter.Fractals
             }
 
             if (cancelToken.IsCancellationRequested) {
-                // another thread decided to cancel
+                // Another thread decided to cancel.
                 System.Diagnostics.Debug.WriteLine("Task canceled");
                 return;
             }
@@ -74,6 +71,7 @@ namespace Peergrade5.Presenter.Fractals
             // Local point in it's own system of coordinates.
             Point2D localPoint = Point2D.GetPolarPoint(lastVec.GetLength() * FractalOptions.lengthMult, Math.PI / 2 - angle);
             double angleLastVec = lastVec.GetAngleBetweenX() - Math.PI / 2;
+
             // If vector looks down, then we should have 180 - angle.
             if (lastVec.y <= 0) {
                 angleLastVec = Math.PI - angleLastVec;
@@ -88,6 +86,7 @@ namespace Peergrade5.Presenter.Fractals
                 rotatedLocalPoint.x *= -1;
             }
 
+            // The UI system coordinates has Y inverted.
             rotatedLocalPoint.y *= -1;
 
             RecursivePoint2D resultPoint = (point + rotatedLocalPoint).ToRecursivePoint2D();
@@ -103,6 +102,7 @@ namespace Peergrade5.Presenter.Fractals
                 graphicWrapper.FullClear();
             }
 
+            // These token are needed to stop async thread (task here).
             cancelSource = new CancellationTokenSource();
             cancelToken = cancelSource.Token;
 
@@ -112,6 +112,7 @@ namespace Peergrade5.Presenter.Fractals
             startSecondFractalPoint.prevPoint = startFractralPoint;
 
             try {
+                // Calculating figures to make UI thread available all time.
                 asyncTask = new Task(() => FillPoints(startSecondFractalPoint), cancelToken);
                 asyncTask.Start();
                 await asyncTask;
@@ -125,23 +126,8 @@ namespace Peergrade5.Presenter.Fractals
             }
         }
 
-        public override void Draw(Graphics graphics) {
-            if (IsLoading())
-                return;
-
-            // Some random num to make this shit not stuck.
-            // We draw 10 figures per tick.
-            graphicWrapper.DrawFiguresNextNum(graphics, 10);
-        }
-
         public override void Calculate() {
             BuildAsync();
-        }
-
-        public override bool IsLoading() {
-            return asyncTask == null || 
-                asyncTask.Status.Equals(TaskStatus.Running) || 
-                graphicWrapper.IsEmpty();
         }
     }
 }

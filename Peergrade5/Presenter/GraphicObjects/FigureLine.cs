@@ -8,8 +8,8 @@ namespace Peergrade5.Presenter.GraphicObjects
 {
     class FigureLine : FigureBase
     {
-        private Point2D point1;
-        private Point2D point2;
+        public Point2D point1;
+        public Point2D point2;
 
         public FigureLine(Pen pen, Point2D point1, Point2D point2) : base(pen) {
             this.point1 = point1;

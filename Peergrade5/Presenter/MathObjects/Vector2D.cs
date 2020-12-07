@@ -4,6 +4,9 @@ using System.Text;
 
 namespace Peergrade5.Presenter.MathObjects
 {
+    /// <summary>
+    ///     Represents Vector in 2d space.
+    /// </summary>
     public class Vector2D
     {
         public double x;
@@ -50,11 +53,20 @@ namespace Peergrade5.Presenter.MathObjects
             return Math.Sqrt(x * x + y * y);
         }
 
+        /// <summary>
+        ///     Get angle (radians) between vectors.
+        /// </summary>
+        /// <param name="vec2"> Some othe vector. </param>
+        /// <returns> Angle in radians. </returns>
         public double GetAngleBetweenVec(Vector2D vec2) {
             return Math.Acos((x * vec2.x + y * vec2.y) /
                               (GetLength() * vec2.GetLength()));
         }
 
+        /// <summary>
+        ///     Get angle (radians) between vector and Ox.
+        /// </summary>
+        /// <returns> Angle in radians. </returns>
         public double GetAngleBetweenX() {
             return GetAngleBetweenVec(new Vector2D(1, 0));
         }

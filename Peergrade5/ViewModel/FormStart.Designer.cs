@@ -38,7 +38,6 @@ namespace Peergrade5.ViewModel
             this.labelIteration = new System.Windows.Forms.Label();
             this.trackBarIteration = new System.Windows.Forms.TrackBar();
             this.labelIterationTrackBar1 = new System.Windows.Forms.Label();
-            this.labelIterationTrackBar2 = new System.Windows.Forms.Label();
             this.labelIterationTrackBar3 = new System.Windows.Forms.Label();
             this.labelIterationTrackBar4 = new System.Windows.Forms.Label();
             this.labelIterationTrackBar5 = new System.Windows.Forms.Label();
@@ -62,6 +61,7 @@ namespace Peergrade5.ViewModel
             this.labelTree3 = new System.Windows.Forms.Label();
             this.labelInfo1 = new System.Windows.Forms.Label();
             this.labelInfo2 = new System.Windows.Forms.Label();
+            this.label1 = new System.Windows.Forms.Label();
             ((System.ComponentModel.ISupportInitialize)(this.trackBarIteration)).BeginInit();
             this.SuspendLayout();
             // 
@@ -155,7 +155,7 @@ namespace Peergrade5.ViewModel
             // 
             this.trackBarIteration.LargeChange = 1;
             this.trackBarIteration.Location = new System.Drawing.Point(54, 502);
-            this.trackBarIteration.Maximum = 20;
+            this.trackBarIteration.Maximum = 15;
             this.trackBarIteration.Minimum = 1;
             this.trackBarIteration.Name = "trackBarIteration";
             this.trackBarIteration.Size = new System.Drawing.Size(608, 45);
@@ -173,19 +173,10 @@ namespace Peergrade5.ViewModel
             this.labelIterationTrackBar1.TabIndex = 12;
             this.labelIterationTrackBar1.Text = "1";
             // 
-            // labelIterationTrackBar2
-            // 
-            this.labelIterationTrackBar2.AutoSize = true;
-            this.labelIterationTrackBar2.Location = new System.Drawing.Point(639, 534);
-            this.labelIterationTrackBar2.Name = "labelIterationTrackBar2";
-            this.labelIterationTrackBar2.Size = new System.Drawing.Size(19, 15);
-            this.labelIterationTrackBar2.TabIndex = 13;
-            this.labelIterationTrackBar2.Text = "20";
-            // 
             // labelIterationTrackBar3
             // 
             this.labelIterationTrackBar3.AutoSize = true;
-            this.labelIterationTrackBar3.Location = new System.Drawing.Point(183, 532);
+            this.labelIterationTrackBar3.Location = new System.Drawing.Point(228, 534);
             this.labelIterationTrackBar3.Name = "labelIterationTrackBar3";
             this.labelIterationTrackBar3.Size = new System.Drawing.Size(13, 15);
             this.labelIterationTrackBar3.TabIndex = 14;
@@ -194,7 +185,7 @@ namespace Peergrade5.ViewModel
             // labelIterationTrackBar4
             // 
             this.labelIterationTrackBar4.AutoSize = true;
-            this.labelIterationTrackBar4.Location = new System.Drawing.Point(334, 534);
+            this.labelIterationTrackBar4.Location = new System.Drawing.Point(432, 536);
             this.labelIterationTrackBar4.Name = "labelIterationTrackBar4";
             this.labelIterationTrackBar4.Size = new System.Drawing.Size(19, 15);
             this.labelIterationTrackBar4.TabIndex = 15;
@@ -203,7 +194,7 @@ namespace Peergrade5.ViewModel
             // labelIterationTrackBar5
             // 
             this.labelIterationTrackBar5.AutoSize = true;
-            this.labelIterationTrackBar5.Location = new System.Drawing.Point(487, 536);
+            this.labelIterationTrackBar5.Location = new System.Drawing.Point(639, 534);
             this.labelIterationTrackBar5.Name = "labelIterationTrackBar5";
             this.labelIterationTrackBar5.Size = new System.Drawing.Size(19, 15);
             this.labelIterationTrackBar5.TabIndex = 16;
@@ -391,17 +382,28 @@ namespace Peergrade5.ViewModel
             this.labelInfo2.Font = new System.Drawing.Font("Segoe UI", 11F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
             this.labelInfo2.Location = new System.Drawing.Point(545, 316);
             this.labelInfo2.Name = "labelInfo2";
-            this.labelInfo2.Size = new System.Drawing.Size(309, 120);
+            this.labelInfo2.Size = new System.Drawing.Size(312, 120);
             this.labelInfo2.TabIndex = 34;
             this.labelInfo2.Text = "Оцени этот великий интерфейс))\r\nКороче, инструкция:\r\n1) В окошках с фракталами мо" +
-    "жно \r\nкрутить колёсиком, чтобы менять масштаб\r\n2) В окошках с фракталами можно\r\n" +
-    "зажимать ЛКМ и двигать фрактал\r\n";
+    "жно \r\nкрутить колёсиком, чтобы менять масштаб.\r\n2) В окошках с фракталами можно\r" +
+    "\nзажимать ЛКМ и двигать фрактал.";
+            // 
+            // label1
+            // 
+            this.label1.AutoSize = true;
+            this.label1.Font = new System.Drawing.Font("Segoe UI", 11F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point);
+            this.label1.Location = new System.Drawing.Point(228, 9);
+            this.label1.Name = "label1";
+            this.label1.Size = new System.Drawing.Size(430, 20);
+            this.label1.TabIndex = 35;
+            this.label1.Text = "ИНДИВИДУАЛЬНЫЕ НАСТРОЙКИ И ВЫЗОВ ФРАКТАЛОВ\r\n";
             // 
             // FormStart
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(7F, 15F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(866, 552);
+            this.Controls.Add(this.label1);
             this.Controls.Add(this.labelInfo2);
             this.Controls.Add(this.labelInfo1);
             this.Controls.Add(this.textBoxTree3);
@@ -425,7 +427,6 @@ namespace Peergrade5.ViewModel
             this.Controls.Add(this.labelIterationTrackBar5);
             this.Controls.Add(this.labelIterationTrackBar4);
             this.Controls.Add(this.labelIterationTrackBar3);
-            this.Controls.Add(this.labelIterationTrackBar2);
             this.Controls.Add(this.labelIterationTrackBar1);
             this.Controls.Add(this.trackBarIteration);
             this.Controls.Add(this.labelIteration);
@@ -462,7 +463,6 @@ namespace Peergrade5.ViewModel
         private System.Windows.Forms.Label labelIteration;
         private System.Windows.Forms.TrackBar trackBarIteration;
         private System.Windows.Forms.Label labelIterationTrackBar1;
-        private System.Windows.Forms.Label labelIterationTrackBar2;
         private System.Windows.Forms.Label labelIterationTrackBar3;
         private System.Windows.Forms.Label labelIterationTrackBar4;
         private System.Windows.Forms.Label labelIterationTrackBar5;
@@ -486,6 +486,7 @@ namespace Peergrade5.ViewModel
         private System.Windows.Forms.Label labelTree3;
         private System.Windows.Forms.Label labelInfo1;
         private System.Windows.Forms.Label labelInfo2;
+        private System.Windows.Forms.Label label1;
     }
 }
 

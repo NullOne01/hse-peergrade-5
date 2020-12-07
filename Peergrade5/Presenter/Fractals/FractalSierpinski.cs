@@ -14,10 +14,6 @@ namespace Peergrade5.Presenter.Fractals
     {
         public override int MaxIterationNum { get => 5; set { } }
 
-        private Task asyncTask;
-        private CancellationTokenSource cancelSource;
-        private CancellationToken cancelToken;
-
         public FractalSierpinski(FractalOptions fractalOptions) : base(fractalOptions) {
 
         }
@@ -25,7 +21,7 @@ namespace Peergrade5.Presenter.Fractals
         private void FillRectangles(RectangleF rectFrom) {
             List<FigureBase> listFigures = new List<FigureBase>();
 
-            //Filling background rectangle.
+            // Filling background rectangle.
             SolidBrush backFillBrush = new SolidBrush(FractalOptions.backColor);
             listFigures.Add(new FigureRectangle(backFillBrush, rectFrom));
 
@@ -44,8 +40,6 @@ namespace Peergrade5.Presenter.Fractals
                         (double)i / Math.Max(FractalOptions.iterationNumber - 1, 1)));
 
                     listFigures.Add(new FigureRectangle(fillBrush, GetMiddleRect(rect)));
-
-                    //System.Diagnostics.Debug.WriteLine($"I'm gay who added 2 points.");
                     CreateNextRectangles(rect, rectsNextGeneration);
 
                     if (cancelToken.IsCancellationRequested)
@@ -60,7 +54,7 @@ namespace Peergrade5.Presenter.Fractals
             }
 
             if (cancelToken.IsCancellationRequested) {
-                // another thread decided to cancel
+                // Another thread decided to cancel.
                 System.Diagnostics.Debug.WriteLine("Task canceled");
                 return;
             }
@@ -85,6 +79,11 @@ namespace Peergrade5.Presenter.Fractals
             }
         }
 
+        /// <summary>
+        ///     Get the middle rectangle out of divided 9 rectangles.
+        /// </summary>
+        /// <param name="rect"> Rectangle that should be divided. </param>
+        /// <returns> The middle rectangle. </returns>
         private RectangleF GetMiddleRect(RectangleF rect) {
             float sideLittleLength = rect.Width / 3;
             return new RectangleF(rect.X + sideLittleLength,
@@ -99,6 +98,7 @@ namespace Peergrade5.Presenter.Fractals
                 graphicWrapper.FullClear();
             }
 
+            // These token are needed to stop async thread (task here).
             cancelSource = new CancellationTokenSource();
             cancelToken = cancelSource.Token;
 
@@ -110,6 +110,7 @@ namespace Peergrade5.Presenter.Fractals
                 FractalOptions.baseLength);
 
             try {
+                // Calculating figures to make UI thread available all time.
                 asyncTask = new Task(() => FillRectangles(startFractralRect), cancelToken);
                 asyncTask.Start();
                 await asyncTask;
@@ -122,24 +123,8 @@ namespace Peergrade5.Presenter.Fractals
                 System.Diagnostics.Debug.WriteLine($"Task canceled with operation exception!");
             }
         }
-
-        public override void Draw(Graphics graphics) {
-            if (IsLoading())
-                return;
-
-            // Some random num to make this shit not stuck.
-            // We draw 10 figures per tick.
-            graphicWrapper.DrawFiguresNextNum(graphics, 10);
-        }
-
         public override void Calculate() {
             BuildAsync();
-        }
-
-        public override bool IsLoading() {
-            return asyncTask == null ||
-                asyncTask.Status.Equals(TaskStatus.Running) ||
-                graphicWrapper.IsEmpty();
         }
     }
 }

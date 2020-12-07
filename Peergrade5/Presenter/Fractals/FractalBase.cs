@@ -16,7 +16,12 @@ namespace Peergrade5.Presenter.Fractals
         public Control control;
         public FractalOptionsLocal fractalOptionsLocal = new FractalOptionsLocal();
 
-        public virtual int MaxIterationNum { get => 20; set { } }
+        // All these shit to make calculations async.
+        protected Task asyncTask;
+        protected CancellationTokenSource cancelSource;
+        protected CancellationToken cancelToken;
+
+        public virtual int MaxIterationNum { get => 15; set { } }
         public FractalOptions FractalOptions {
             get => fractalOptions;
             set {
@@ -42,12 +47,31 @@ namespace Peergrade5.Presenter.Fractals
             graphicWrapper = new GraphicWrapper(fractalOptionsLocal);
         }
 
-        public bool IsIterationNumLessEqualMax(int iterationNum) {
-            return iterationNum <= MaxIterationNum;
+        public bool IsIterationNumLessEqualMax(int iterationNum) => iterationNum <= MaxIterationNum;
+
+        public bool IsLoading() {
+            return asyncTask == null ||
+                asyncTask.Status.Equals(TaskStatus.Running) ||
+                graphicWrapper.IsEmpty();
         }
 
-        public abstract bool IsLoading();
-        public abstract void Draw(Graphics graphics);
+        /// <summary>
+        ///     Draw figures per tick.
+        /// </summary>
+        /// <param name="graphics"></param>
+        public void Draw(Graphics graphics) {
+            if (IsLoading())
+                return;
+
+            // Some random num to make this shit not stuck.
+            // We draw 10 figures per tick.
+            graphicWrapper.DrawFiguresNextNum(graphics, 10);
+        }
+
+        /// <summary>
+        ///     Base method to calculate figures. 
+        ///     In these fractals it starts async task.
+        /// </summary>
         public abstract void Calculate();
     }
 }

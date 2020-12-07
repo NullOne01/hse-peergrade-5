@@ -22,7 +22,7 @@ namespace Peergrade5
                 Application.Run(new FormStart());
             }
             catch (Exception ex) {
-                // Shit happens. Let's try to prevent it :)
+                // Shit happens. Let's try to make it beuatiful. :)
                 MessageBox.Show(ex.Message);
             }
         }

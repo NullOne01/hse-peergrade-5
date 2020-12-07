@@ -15,6 +15,9 @@ namespace Peergrade5.ViewModel
     {
         private FractalOptions fractalOptions = new FractalOptions();
         private List<FormFractal> formsFractal = new List<FormFractal>();
+        
+        // Let's limit user's freedom.
+        private const int maxFormCount = 2;
 
         public FormStart() {
             InitializeComponent();
@@ -46,10 +49,18 @@ namespace Peergrade5.ViewModel
         }
 
         private void AddNewFractalForm(FormFractal formFractal) {
-            formsFractal.Add(formFractal);
-            formFractal.Show();
+            // Removing all closed forms.
+            formsFractal.RemoveAll(form => form.IsDisposed);
 
-            PassFractalOptions();
+            if (formsFractal.Count < maxFormCount) {
+                formsFractal.Add(formFractal);
+                formFractal.Show();
+
+                PassFractalOptions();
+            } else {
+                MessageBox.Show($"Максимальное количество окон {maxFormCount}. {Environment.NewLine}" +
+                    $"Закрой что-нибудь.");
+            }
         }
 
         private void PassFractalOptions() {

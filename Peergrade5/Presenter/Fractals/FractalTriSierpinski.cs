@@ -14,10 +14,6 @@ namespace Peergrade5.Presenter.Fractals
     {
         public override int MaxIterationNum { get => 10; set { } }
 
-        private Task asyncTask;
-        private CancellationTokenSource cancelSource;
-        private CancellationToken cancelToken;
-
         public FractalTriSierpinski(FractalOptions fractalOptions) : base(fractalOptions) {
 
         }
@@ -55,7 +51,7 @@ namespace Peergrade5.Presenter.Fractals
             }
 
             if (cancelToken.IsCancellationRequested) {
-                // another thread decided to cancel
+                // Another thread decided to cancel.
                 System.Diagnostics.Debug.WriteLine("Task canceled");
                 return;
             }
@@ -88,6 +84,7 @@ namespace Peergrade5.Presenter.Fractals
                 graphicWrapper.FullClear();
             }
 
+            // These token are needed to stop async thread (task here).
             cancelSource = new CancellationTokenSource();
             cancelToken = cancelSource.Token;
 
@@ -97,6 +94,7 @@ namespace Peergrade5.Presenter.Fractals
                 FractalOptions.baseLength);
 
             try {
+                // Calculating figures to make UI thread available all time.
                 asyncTask = new Task(() => FillTriangles(startFractralTriangle), cancelToken);
                 asyncTask.Start();
                 await asyncTask;
@@ -110,23 +108,8 @@ namespace Peergrade5.Presenter.Fractals
             }
         }
 
-        public override void Draw(Graphics graphics) {
-            if (IsLoading())
-                return;
-
-            // Some random num to make this shit not stuck.
-            // We draw 10 figures per tick.
-            graphicWrapper.DrawFiguresNextNum(graphics, 10);
-        }
-
         public override void Calculate() {
             BuildAsync();
-        }
-
-        public override bool IsLoading() {
-            return asyncTask == null ||
-                asyncTask.Status.Equals(TaskStatus.Running) ||
-                graphicWrapper.IsEmpty();
         }
     }
 }

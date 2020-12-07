@@ -13,9 +13,10 @@ namespace Peergrade5.ViewModel
 {
     public partial class FormFractal : Form
     {
+        public FractalBase fractalBase;
+
         // This is the offscreen drawing buffer.
         private Bitmap canvas;
-        public FractalBase fractalBase;
 
         private int mouseHoldStartX = 0;
         private int mouseHoldStartY = 0;
@@ -88,7 +89,6 @@ namespace Peergrade5.ViewModel
         }
 
         private void FormFractal_MouseWheel(object sender, MouseEventArgs e) {
-            //fractalBase.fractalOptionsLocal.penWidth += (float) e.Delta / 100;
             fractalBase.fractalOptionsLocal.ScaleNum += (float) e.Delta / 500;
             ClearCanvas();
             Refresh();
@@ -97,6 +97,7 @@ namespace Peergrade5.ViewModel
         private void timerUpdate_Tick(object sender, EventArgs e) {
             fractalBase.control = this;
 
+            // We need to hide loading label and show save button.
             labelLoading.Visible = fractalBase.IsLoading();
             buttonSave.Visible = !fractalBase.IsLoading();
 
@@ -152,7 +153,7 @@ namespace Peergrade5.ViewModel
 
         private void buttonSave_Click(object sender, EventArgs e) {
             if (saveFileDialog1.ShowDialog() == DialogResult.OK) {
-                canvas.Save(saveFileDialog1.FileName, ImageFormat.Jpeg);
+                canvas.Save(saveFileDialog1.FileName, ImageFormat.Png);
             }
         }
     }

@@ -12,17 +12,14 @@ namespace Peergrade5.Presenter.Fractals
 {
     class FractalCantor : FractalBase
     {
-        public override int MaxIterationNum { get => 20; set { } }
-
-        private Task asyncTask;
-        private CancellationTokenSource cancelSource;
-        private CancellationToken cancelToken;
+        public override int MaxIterationNum { get => 15; set { } }
 
         public FractalCantor(FractalOptions fractalOptions) : base(fractalOptions) {
 
         }
 
         private void FillPoints(Tuple<Point2D, Point2D> startLine) {
+            // Replaced recursion on two loops. I don't trust recursions 
             List<FigureBase> listFigures = new List<FigureBase>();
 
             Queue<Tuple<Point2D, Point2D>> linesToContinue = new Queue<Tuple<Point2D, Point2D>>();
@@ -56,7 +53,7 @@ namespace Peergrade5.Presenter.Fractals
             }
 
             if (cancelToken.IsCancellationRequested) {
-                // another thread decided to cancel
+                // Another thread decided to cancel.
                 System.Diagnostics.Debug.WriteLine("Task canceled");
                 return;
             }
@@ -85,6 +82,7 @@ namespace Peergrade5.Presenter.Fractals
                 graphicWrapper.FullClear();
             }
 
+            // These token are needed to stop async thread (task here).
             cancelSource = new CancellationTokenSource();
             cancelToken = cancelSource.Token;
 
@@ -93,6 +91,7 @@ namespace Peergrade5.Presenter.Fractals
             Point2D rightPoint = new Point2D(control.Width / 2 + FractalOptions.baseLength / 2, control.Height / 2);
 
             try {
+                // Calculating figures to make UI thread available all time.
                 asyncTask = new Task(() => FillPoints(new Tuple<Point2D, Point2D>(leftPoint, rightPoint)), cancelToken);
                 asyncTask.Start();
                 await asyncTask;
@@ -106,23 +105,8 @@ namespace Peergrade5.Presenter.Fractals
             }
         }
 
-        public override void Draw(Graphics graphics) {
-            if (IsLoading())
-                return;
-
-            // Some random num to make this shit not stuck.
-            // We draw 10 figures per tick.
-            graphicWrapper.DrawFiguresNextNum(graphics, 10);
-        }
-
         public override void Calculate() {
             BuildAsync();
-        }
-
-        public override bool IsLoading() {
-            return asyncTask == null ||
-                asyncTask.Status.Equals(TaskStatus.Running) ||
-                graphicWrapper.IsEmpty();
         }
     }
 }
